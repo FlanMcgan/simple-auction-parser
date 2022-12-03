@@ -1,27 +1,32 @@
 
-
-
 import threading
+import os
+from datetime import date
+
+delayAmountInSeconds = 30.0
+
 
 def writeLog():
-  threading.Timer(30.0, writeLog).start()
-  f = open("latest.log", "r")
-  for x in f:
-    if "AUCTION" in x:
-      f2 = open("auctions.txt", "r")
+  threading.Timer(delayAmountInSeconds, writeLog).start()
+  
+  today = date.today()
+  auctionFileName = "auction"+today.strftime("%Y-%m-%d")+".txt"
+  latestLog = open("latest.log", "r")
+  for latestLogLine in latestLog:
+    if "AUCTION" in latestLogLine:
+      if not os.path.exists(auctionFileName):
+        open(auctionFileName, 'w').close()
+      auctionFile = open(auctionFileName, "r")
       foundInFile = False
-      for x2 in f2:
-        if x in x2:
+      for autionFileLine in auctionFile:
+        if latestLogLine in autionFileLine:
           foundInFile = True
-      f2.close()
+      auctionFile.close()
       if foundInFile == False:
-        f2 = open("auctions.txt", "a")
-        f2.write(x)
-        f2.close()
+        auctionFile = open(auctionFileName, "a")
+        auctionFile.write(latestLogLine)
+        auctionFile.close()
       
-  f.close()
-
-
+  latestLog.close()
 
 writeLog()
-
