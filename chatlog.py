@@ -8,7 +8,6 @@ def writeLog():
   f = open("latest.log", "r")
   for x in f:
     if "AUCTION" in x:
-      print(x) 
       f2 = open("auctions.txt", "r")
       foundInFile = False
       for x2 in f2:
